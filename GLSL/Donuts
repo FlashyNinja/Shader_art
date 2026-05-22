@@ -1,0 +1,21 @@
+void mainImage( out vec4 fragColor, in vec2 fragCoord )
+{
+    // Normalized pixel coordinates (from 0 to 1)
+    vec2 uv = fragCoord/iResolution.xy * 2.0 - 1.0;
+    //To avoid stretching of the image we multiply the x corrdnate with aspect ratio of the screen
+    uv.x *= iResolution.x/iResolution.y;
+    
+    //length function
+    float d= length(uv) ;
+    
+    d=sin(d*8.0 + iTime)/8.0;
+    d= abs(d); //absolute value, means all values are positive
+    //d= step(0.1,d); //step function, 1st param is the threshold, so d>0.1 are converted to 1 d<0.1 are converted to 0
+    d= smoothstep(0.0,0.1,d);//like the step function but values b/w 0.0 and 0.1 will be gradient
+    
+    // Time varying pixel color
+    vec3 col = 0.5 + 0.5*cos(iTime+uv.xyx+vec3(0,2,4));
+
+    // Output to screen
+    fragColor = vec4(d,d,d,1.0);
+}
